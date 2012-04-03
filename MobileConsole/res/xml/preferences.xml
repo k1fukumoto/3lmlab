@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="Enterprise Server Settings">
         <EditTextPreference android:title="Host Name" android:key="hostname"/>
-        <EditTextPreference android:title="Super User Name" android:key="username"/>
-        <EditTextPreference android:title="Super User Password" android:key="password"/>
+        <EditTextPreference android:title="Super User Name" android:key="superuser_name"/>
+        <EditTextPreference android:title="Super User Password" android:key="superuser_pass"/>
     </PreferenceCategory>
 </PreferenceScreen>

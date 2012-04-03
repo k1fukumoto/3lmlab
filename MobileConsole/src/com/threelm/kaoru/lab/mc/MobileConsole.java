@@ -50,12 +50,15 @@ import org.json.JSONTokener;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -217,11 +220,11 @@ public class MobileConsole extends ListActivity {
         	e.putString(C.KEY.SUPERUSER_PASS, C.DEFAULT.SUPERUSER_PASS);
         	e.commit();
         }
-        Log.d(TAG,String.format("Prefs Count: %d",prefs.getAll().size()));
-        Log.d(TAG,prefs.getString("hostname", "hostname not found"));
 
-        EnterpriseServer es = new EnterpriseServer("192.168.1.10",8443);
-        es.login("superuser@3lm.com","threelm");
+        EnterpriseServer es = new EnterpriseServer
+        	(prefs.getString(C.KEY.HOST, C.DEFAULT.HOST),8443);
+        es.login(prefs.getString(C.KEY.SUPERUSER_NAME,C.DEFAULT.SUPERUSER_NAME),
+        		prefs.getString(C.KEY.SUPERUSER_PASS, C.DEFAULT.SUPERUSER_PASS));
         
         mData = new ArrayAdapter<String>(this,R.layout.list_item);
         for(Enterprise e : es.searchForEnterprise(null)) {
@@ -235,4 +238,24 @@ public class MobileConsole extends ListActivity {
 
         lv.setOnItemClickListener(mClickListener);
     }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.setting:
+			Intent i = new Intent();
+			i.setClassName(this, "com.threelm.kaoru.lab.mc.Preference");
+			startActivity(i);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		this.getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
+	}
+
 }
