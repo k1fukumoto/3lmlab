@@ -50,9 +50,14 @@ import org.json.JSONTokener;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -184,13 +189,14 @@ class EnterpriseServer extends WebClient {
 }
 
 public class MobileConsole extends ListActivity {
-	private final String TAG = "APITesterActivity";
+	private final String TAG = "MobileConsole";
 
 	static class C {
 		static class KEY {
 			static final String HOST = "hostname";
 			static final String SUPERUSER_NAME = "superuser_name";
 			static final String SUPERUSER_PASS = "superuser_pass";
+			static final String WIFI_ENABLED = "wifi_enabled";
 		}
 		static class DEFAULT {
 			static final String HOST = "192.168.1.10";
@@ -208,6 +214,16 @@ public class MobileConsole extends ListActivity {
 		}
 	};
 	
+	OnSharedPreferenceChangeListener mPrefChangeListener = new OnSharedPreferenceChangeListener() {
+		public void onSharedPreferenceChanged(SharedPreferences prefs,String key) {
+			if(key.equals(C.KEY.WIFI_ENABLED)) {
+				boolean f = prefs.getBoolean(C.KEY.WIFI_ENABLED, false);
+				Log.d(TAG,String.format("Changing Wifi status: %b", f));
+	    		((WifiManager) getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(f);
+			}
+		}
+	};
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -220,6 +236,22 @@ public class MobileConsole extends ListActivity {
         	e.putString(C.KEY.SUPERUSER_PASS, C.DEFAULT.SUPERUSER_PASS);
         	e.commit();
         }
+
+        {
+    		WifiManager wfm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    		/*
+    		WifiInfo wi = wfm.getConnectionInfo();
+    		Log.d(TAG,String.format("Wifi Status: %s", wi.toString()));
+    		for (WifiConfiguration config : wfm.getConfiguredNetworks()) {
+        		Log.d(TAG,String.format("Wifi Config: %s", config.toString()));
+    		}
+    		*/
+    		
+        	Editor e = prefs.edit();
+        	e.putBoolean(C.KEY.WIFI_ENABLED,wfm.isWifiEnabled());
+        	e.commit();
+        }
+        prefs.registerOnSharedPreferenceChangeListener(this.mPrefChangeListener);
 
         EnterpriseServer es = new EnterpriseServer
         	(prefs.getString(C.KEY.HOST, C.DEFAULT.HOST),8443);

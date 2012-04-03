@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="Enterprise Server Settings">
+    <PreferenceCategory android:title="Enterprise Server Settings" android:key="enterprise_server">
         <EditTextPreference android:title="Host Name" android:key="hostname"/>
         <EditTextPreference android:title="Super User Name" android:key="superuser_name"/>
         <EditTextPreference android:title="Super User Password" android:key="superuser_pass"/>
+        
+    </PreferenceCategory>
+    <PreferenceCategory android:key="device_control" android:title="Device Control">
+        <CheckBoxPreference android:title="Wifi Enabled" android:key="wifi_enabled"/>
     </PreferenceCategory>
 </PreferenceScreen>
