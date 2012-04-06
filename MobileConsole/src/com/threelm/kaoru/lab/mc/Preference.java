@@ -1,5 +1,6 @@
 package com.threelm.kaoru.lab.mc;
 
+import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,13 +25,13 @@ public class Preference {
 		static final String SUPERUSER_PASS = "threelm";
 	}
 
-	Context  mCtxt;
+	Application mApp;
 	SharedPreferences mPrefs;
 
 	OnSharedPreferenceChangeListener mPrefChangeListener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences prefs,String key) {
 			if(key.equals(KEY.WIFI_ENABLED)) {
-				((WifiManager) mCtxt.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(
+				((WifiManager) mApp.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(
 						prefs.getBoolean(key, false)
 						);
 			} else if(key.equals(KEY.BLUETOOTH_ENABLED)) {
@@ -48,9 +49,20 @@ public class Preference {
 		return mPrefs.getString(key,null);
 	}
 	
-	Preference(Context ctxt) {
-		mCtxt = ctxt;
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(mCtxt);
+	private static Preference sPref = null;
+	
+	public static Preference initialize(Application app) {
+		sPref = new Preference(app);
+		return sPref;
+	}
+	
+	public static Preference getInstance() {
+		return sPref;
+	}
+
+	private Preference(Application app) {
+		mApp = app;
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(mApp);
 		
 		mPrefs.registerOnSharedPreferenceChangeListener(this.mPrefChangeListener);
 		Editor e = mPrefs.edit();
@@ -61,7 +73,7 @@ public class Preference {
 				e.putString(KEY.SUPERUSER_PASS, DEFAULT.SUPERUSER_PASS);
 			}
     
-			e.putBoolean(KEY.WIFI_ENABLED,((WifiManager)mCtxt.getSystemService(Context.WIFI_SERVICE)).isWifiEnabled());
+			e.putBoolean(KEY.WIFI_ENABLED,((WifiManager)mApp.getSystemService(Context.WIFI_SERVICE)).isWifiEnabled());
 			e.putBoolean(KEY.BLUETOOTH_ENABLED,BluetoothAdapter.getDefaultAdapter().isEnabled());
 		}
 		e.commit();

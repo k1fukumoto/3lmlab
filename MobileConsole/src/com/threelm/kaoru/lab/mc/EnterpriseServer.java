@@ -73,6 +73,20 @@ class Enterprise {
 	String domain;
 	int userActivations;
 	int maxActivations;
+	
+	public String toString() {
+		return String.format("%s (%s)",name,domain);
+	}
+}
+
+class User {
+	String firstName;
+	String surName;
+	String email;
+	
+	public String toString() {
+		return String.format("%s %s (%s)",firstName,surName,email);
+	}
 }
 
 public class EnterpriseServer extends WebClient {
@@ -82,8 +96,20 @@ public class EnterpriseServer extends WebClient {
 	private String host = null;
 	private int port = 0;
 	private String urlbase = null;
+	private static EnterpriseServer sServer = null;
 	
-	EnterpriseServer(String h, int p) {
+	public static EnterpriseServer initialize(Preference pref) {
+		sServer = new EnterpriseServer(pref.getValue(Preference.KEY.HOST),8443);
+    	sServer.login(pref.getValue(Preference.KEY.SUPERUSER_NAME),
+		    		 pref.getValue(Preference.KEY.SUPERUSER_PASS));
+		return sServer;
+	}
+
+	public static EnterpriseServer getInstance() {
+		return sServer;
+	}
+	
+	private EnterpriseServer(String h, int p) {
 		host = h;
 		port = p;
 		urlbase = String.format("https://%s:%d/api",host,port);
@@ -130,6 +156,33 @@ public class EnterpriseServer extends WebClient {
 				e.name = j.getString("name");
 				e.domain = j.getString("domain");
 				ret.add(e);
+			}
+		} catch(Exception e) {
+			Log.e(TAG,e.toString());
+		}
+		return ret;
+	}
+
+	ArrayList<User> getAllAdmins(String domain) {
+		ArrayList<User> ret = new ArrayList<User>();
+		PostTask pt = new PostTask();
+
+		JSONObject param = new JSONObject();
+		JSONObject ent = new JSONObject();
+		try {
+			param.put("sessionToken", sessionToken);
+			ent.put("domain",domain);
+			param.put("enterprise",ent);
+
+			pt.execute(new PostParam(getUrl("getAllAdmins"),param));
+			JSONArray arr = pt.get().getJSONArray("users");
+			for(int i=0; i<arr.length(); i++){
+				JSONObject j = arr.getJSONObject(i);
+				User u = new User();
+				u.firstName = j.getString("firstName");
+				u.surName = j.getString("surName");
+				u.email = j.getString("email");
+				ret.add(u);
 			}
 		} catch(Exception e) {
 			Log.e(TAG,e.toString());
