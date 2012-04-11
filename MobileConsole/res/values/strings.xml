@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">APITester</string>
+    <string name="app_name">3LM Mobile Console</string>
     <string name="sample">Sample Text</string>
+    <string name="no_data">No Data Found</string>
 
 </resources>

@@ -21,6 +21,7 @@ public class AdminUserList extends ActivityBase {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.admin_user_list);
 
         String domain = this.getIntent().getExtras().getString("domain");
         EnterpriseServer es = EnterpriseServer.getInstance();

@@ -16,6 +16,7 @@ public class ActivityBase extends ListActivity {
 			Intent i = new Intent(this,PreferenceWindow.class);
 			startActivity(i);
 			return true;
+		case R.id.threelm_dm:
 		}
 		return false;
 	}
