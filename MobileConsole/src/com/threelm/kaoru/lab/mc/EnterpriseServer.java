@@ -6,14 +6,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,16 +22,8 @@ import org.json.JSONTokener;
 import android.os.AsyncTask;
 import android.util.Log;
 
-class WebClient extends DefaultHttpClient {
-	private final String TAG = "WebClient";
-
-	WebClient() {
-		super();
-		SSLSocketFactory sf = (SSLSocketFactory)this.getConnectionManager()
-			.getSchemeRegistry().getScheme("https").getSocketFactory();
-		sf.setHostnameVerifier(new AllowAllHostnameVerifier());
-	}
-
+class WebClient {
+	
 	class PostParam {
 		String url;
 		JSONObject json;
@@ -39,12 +31,19 @@ class WebClient extends DefaultHttpClient {
 	}
 
 	class PostTask extends AsyncTask<PostParam, Void, JSONObject> {
+		static final String TAG = "PostTask";
 		@Override
 		protected JSONObject doInBackground(PostParam... args) {
 			PostParam p = args[0];
 			
-			HttpClient client = (HttpClient)new WebClient();
 			HttpPost post = new HttpPost(p.url);
+			   
+			SchemeRegistry schemeRegistry = new SchemeRegistry();
+			schemeRegistry.register(new Scheme ("https", new EasySSLSocketFactory(), 443));
+			SingleClientConnManager cm = new SingleClientConnManager(post.getParams(), schemeRegistry);
+
+			HttpClient client = new DefaultHttpClient(cm, post.getParams());
+			
 			try {
 				List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>(1);
 				pairs.add(new BasicNameValuePair("json",p.json.toString()));

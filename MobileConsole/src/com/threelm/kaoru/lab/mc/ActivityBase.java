@@ -1,22 +1,39 @@
 package com.threelm.kaoru.lab.mc;
 
 import android.app.ListActivity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class ActivityBase extends ListActivity {
-	@SuppressWarnings("unused")
 	private final String TAG = this.getClass().getName();
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-		case R.id.setting:
-			Intent i = new Intent(this,PreferenceWindow.class);
-			startActivity(i);
-			return true;
-		case R.id.threelm_dm:
+		try {
+			Intent i;
+			switch(item.getItemId()) {
+			case R.id.setting:
+				i = new Intent(this,PreferenceWindow.class);
+				startActivity(i);
+				return true;
+			case R.id.threelm_dm:
+				i = new Intent();
+				String p = "com.threelm.dm";
+				String c = ".UserLoginActivity";
+				i.setComponent(new ComponentName(p,p+c));
+				startActivity(i);
+				return true;
+			case R.id.threelm_setting:
+				i = new Intent(this,SettingList.class);
+				startActivity(i);
+				return true;
+				
+			}
+		} catch (Exception e) {
+			Log.e(TAG,e.toString());
 		}
 		return false;
 	}

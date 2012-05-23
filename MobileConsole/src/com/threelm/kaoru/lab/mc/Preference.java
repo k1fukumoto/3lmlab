@@ -19,10 +19,10 @@ public class Preference {
 		static final String BLUETOOTH_ENABLED = "bluetooth_enabled";
 	}
 	static class DEFAULT {
-		static final String HOST = "192.168.1.10";
+		static final String HOST = "docomo-jp.3lm.com";
 		static final int PORT = 8443;
-		static final String SUPERUSER_NAME = "superuser@3lm.com";
-		static final String SUPERUSER_PASS = "threelm";
+		static final String SUPERUSER_NAME = "superadmin@docomo.3lm.com";
+		static final String SUPERUSER_PASS = "bf1C2p54o72VY8P8LSOV";
 	}
 
 	Application mApp;
