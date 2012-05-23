@@ -19,18 +19,6 @@ public class ActivityBase extends ListActivity {
 				i = new Intent(this,PreferenceWindow.class);
 				startActivity(i);
 				return true;
-			case R.id.threelm_dm:
-				i = new Intent();
-				String p = "com.threelm.dm";
-				String c = ".UserLoginActivity";
-				i.setComponent(new ComponentName(p,p+c));
-				startActivity(i);
-				return true;
-			case R.id.threelm_setting:
-				i = new Intent(this,SettingList.class);
-				startActivity(i);
-				return true;
-				
 			}
 		} catch (Exception e) {
 			Log.e(TAG,e.toString());

@@ -30,18 +30,6 @@ public class Preference {
 
 	OnSharedPreferenceChangeListener mPrefChangeListener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences prefs,String key) {
-			if(key.equals(KEY.WIFI_ENABLED)) {
-				((WifiManager) mApp.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(
-						prefs.getBoolean(key, false)
-						);
-			} else if(key.equals(KEY.BLUETOOTH_ENABLED)) {
-				BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
-				if(prefs.getBoolean(key,false)) {
-					ba.enable();
-				} else {
-					ba.disable();
-				}
-			}
 		}
 	};
 	
@@ -72,9 +60,6 @@ public class Preference {
 				e.putString(KEY.SUPERUSER_NAME, DEFAULT.SUPERUSER_NAME);
 				e.putString(KEY.SUPERUSER_PASS, DEFAULT.SUPERUSER_PASS);
 			}
-    
-			e.putBoolean(KEY.WIFI_ENABLED,((WifiManager)mApp.getSystemService(Context.WIFI_SERVICE)).isWifiEnabled());
-			e.putBoolean(KEY.BLUETOOTH_ENABLED,BluetoothAdapter.getDefaultAdapter().isEnabled());
 		}
 		e.commit();
 	}	
