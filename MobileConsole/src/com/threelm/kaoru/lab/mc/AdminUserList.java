@@ -1,3 +1,14 @@
+/**************************************************************************************
+ Copyright 2012 Kaoru Fukumoto All Rights Reserved
+
+ You may freely use and redistribute this script as long as this
+ copyright notice remains intact
+
+ DISCLAIMER. THIS SCRIPT IS PROVIDED TO YOU "AS IS" WITHOUT WARRANTIES OR CONDITIONS
+ OF ANY KIND, WHETHER ORAL OR WRITTEN, EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY
+ DISCLAIMS ANY IMPLIED WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY
+ QUALITY, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+***************************************************************************************/
 package com.threelm.kaoru.lab.mc;
 
 import android.os.Bundle;
@@ -15,6 +26,7 @@ public class AdminUserList extends ActivityBase {
 
 	OnItemClickListener mClickListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view,int pos, long id) {
+			/* XXX: Show Device List Window */
 		}
 	};
 	
@@ -30,7 +42,6 @@ public class AdminUserList extends ActivityBase {
         for(User u : es.getAllAdmins(domain)) {
         	mData.add(u);
         }
-
         setListAdapter(mData);
 
         ListView lv = getListView();
