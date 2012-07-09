@@ -10,7 +10,8 @@ class EnterpriseServer:
         self.host = 'docomo-jp.3lm.com'
         self.port = 8443
         self.user = 'superadmin@docomo.3lm.com'
-        self.pswd = 'bf1C2p54o72VY8P8LSOV'
+        # XXX: Change Password
+        self.pswd = '***************'
         self.base_url = "https://%s:%s/api/mt/" % (self.host,self.port)
         self.token = ''
         resp = self.post('getSessionToken',{'username': self.user, 'password': self.pswd})
