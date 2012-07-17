@@ -1,0 +1,41 @@
+<html>
+<head>
+<style type="text/css"><!--
+body {
+  font-family: Calbri, Cambria, Arial;
+  font-size: 14px;
+}
+table.open {
+}
+table.closed {
+  color: gray;
+}
+td {
+  padding: 2px 4px;
+  vertical-align:top;
+}
+--></style>
+</head>
+<body>
+<h3>Feature Requests</h3>
+<table class="open">
+<% issues.select{|i| i.is_open && !(i.is_bug) }.each do |issue| %>
+<%= issue.tr %>
+<% end %>
+</table>
+
+<h3>Open Bugs</h3>
+<table class="open">
+<% issues.select{|i| i.is_open && i.is_bug }.each do |issue| %>
+<%= issue.tr %>
+<% end %>
+</table>
+
+<h3>Closed Issues</h3>
+<table class="closed">
+<% issues.select{|i| i.is_closed}.each do |issue| %>
+<%= issue.tr %>
+<% end %>
+</table>
+</body>
+</html>
