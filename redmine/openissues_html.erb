@@ -17,23 +17,20 @@ td {
 --></style>
 </head>
 <body>
-<h3>Feature Requests</h3>
+<% issues_sorted = issues.sort{|a,b| b.tracker_rank <=> a.tracker_rank} %>
+<h3>Open Issues</h3>
 <table class="open">
-<% issues.select{|i| i.is_open && !(i.is_bug) }.each do |issue| %>
-<%= issue.tr %>
-<% end %>
-</table>
-
-<h3>Open Bugs</h3>
-<table class="open">
-<% issues.select{|i| i.is_open && i.is_bug }.each do |issue| %>
+<% issues_sorted.select{|i| i.is_open}.each do |issue| %>
 <%= issue.tr %>
 <% end %>
 </table>
 
 <h3>Closed Issues</h3>
 <table class="closed">
-<% issues.select{|i| i.is_closed}.each do |issue| %>
+<% issues.select{|i| i.is_closed && !(i.is_bug) }.each do |issue| %>
+<%= issue.tr %>
+<% end %>
+<% issues.select{|i| i.is_closed && i.is_bug }.each do |issue| %>
 <%= issue.tr %>
 <% end %>
 </table>

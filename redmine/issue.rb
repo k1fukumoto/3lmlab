@@ -12,6 +12,7 @@ class Issue < ActiveResource::Base
     <<EOS
 <tr>
   <td width=50>#{a_issue(self.id)}</td>
+  <td width=100>#{self.tracker.name}</td>
   <td width=100>#{self.component}</td>
   <td width=200>#{self.assigned_to.name}</td>
   <td width=600>#{self.subject}</td>
@@ -44,6 +45,13 @@ EOS
   def is_closed
     sname = self.status.name
     sname == 'Resolved' || sname == 'Closed' || sname == 'Rejected'
+  end
+  def tracker_rank
+    if self.is_bug
+      0
+    else
+      1
+    end
   end
 end
 
